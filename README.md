@@ -1,142 +1,129 @@
-# 🔐 Phishing URL Detection
+# Phishing URL Detection System
 
-A machine learning-based system for detecting potentially malicious URLs using Python, scikit-learn, and Flask.
+A Python-based machine learning project for identifying potentially malicious URLs through hybrid feature extraction, ensemble classification, and a Flask web interface/API.
 
-The project aims to classify URLs as **Phishing** or **Legitimate** by analyzing URL characteristics and applying supervised machine learning algorithms.
+> **Repository status:** This repository currently contains project documentation and configuration files. The application source code, dataset, trained models, and frontend assets have not yet been pushed. The sections below describe the system documented for this project; setup commands will become executable once the corresponding files are added.
 
-> **Project status:** Initial project setup. Dataset preparation, feature extraction, model training, and the Flask application are planned development steps and should be marked complete only after implementation.
+## Overview
 
-## 📌 Overview
+Phishing URLs imitate legitimate websites or use deceptive structures to persuade people to disclose credentials and other sensitive information. This project explores the use of machine learning to classify URLs as **potentially phishing** or **potentially legitimate**.
 
-Phishing attacks use deceptive URLs to trick users into revealing sensitive information such as passwords, banking credentials, and personal data.
+The documented system combines URL lexical analysis, domain-related attributes, and SSL/security indicators. Extracted features are supplied to trained classifiers, with predictions exposed through a Flask application.
 
-This project focuses on developing an automated detection system that extracts meaningful features from URLs and uses a trained machine learning model to identify potentially malicious links.
+This is a defensive educational/research project. A model prediction is an indicator, not a guarantee that a website is safe or malicious.
 
-## 🎯 Objectives
+## Documented capabilities
 
-- Detect potentially malicious and phishing URLs.
-- Extract meaningful lexical features from URLs.
-- Train and evaluate machine learning classification models.
-- Provide predictions through a Flask web application.
-- Display prediction results and model outputs through a user-friendly interface.
+- Hybrid URL feature extraction.
+- Comparison of ensemble machine learning classifiers.
+- Flask-based web interface and REST API.
+- Single-URL and batch prediction workflows.
+- Prediction scores and model evaluation visualizations.
+- Feature-importance information for model interpretation.
 
-## 🛠️ Technology Stack
+These capabilities are described in the project documentation; they should not be considered runnable from this repository until the implementation is uploaded.
 
-| Technology | Purpose |
-|---|---|
-| Python | Core programming language |
-| Pandas & NumPy | Data processing |
-| scikit-learn | Machine learning |
-| Matplotlib & Seaborn | Data visualization |
-| Flask | Backend and REST API |
-| HTML, CSS & JavaScript | Frontend |
-| Joblib | Model serialization |
-
-## ⚙️ Planned System Architecture
+## System design
 
 ```text
-        User submits URL
-               |
-               v
-        Flask web interface
-               |
-               v
-        URL feature extraction
-               |
-               v
-        Trained ML classifier
-               |
-               v
-        Prediction and score
-               |
-               v
-        Result displayed to user
+             URL submitted by user
+                      |
+                      v
+              Flask interface/API
+                      |
+                      v
+             URL feature extraction
+                      |
+                      v
+             Hybrid feature vector
+                      |
+                      v
+              Trained classifier
+                      |
+                      v
+          Phishing / Legitimate result
+                      |
+                      v
+              Result and score
 ```
 
-## 🔍 URL Feature Extraction
+## Feature engineering
 
-The system is intended to analyze URL characteristics such as:
+The project documentation describes **29 hybrid features** across three groups:
 
-- URL length
-- Number of dots, hyphens, and digits
-- HTTPS scheme presence
-- IP-address-based hosts
-- Presence of special characters
-- Suspicious keywords
-- Number of subdomains
-- URL-shortening indicators
+| Feature group | Count | Examples |
+|---|---:|---|
+| Lexical | 20 | URL length, special characters, suspicious keywords, IP-address indicators |
+| Domain | 6 | Subdomain count, domain-related attributes, entropy |
+| SSL/security | 3 | HTTPS and certificate-related indicators |
+| **Total** | **29** | |
 
-These are heuristic signals, not definitive proof of malicious intent. HTTPS alone does not establish that a website is trustworthy.
+Some domain attributes may require external lookups. A feature based on a mock or unavailable lookup must be identified as such and must not be presented as verified threat intelligence.
 
-## 🤖 Machine Learning Approach
+## Machine learning
 
-The project will compare classification algorithms such as:
+The documented model comparison includes:
 
-- Logistic Regression
-- Random Forest Classifier
-- XGBoost (optional)
+- Random Forest
+- Gradient Boosting
+- XGBoost
+- LightGBM
 
-Model evaluation will consider:
+The project documentation identifies **XGBoost** as the selected model.
 
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Confusion matrix
-- ROC-AUC score
+### Reported evaluation results
 
-Random Forest is the initial candidate model. The final model will be selected based on evaluation results rather than assumed performance.
+| Metric | Documented result |
+|---|---:|
+| Accuracy | 97.40% |
+| Precision | 97.20% |
+| Recall | 97.60% |
+| F1-score | 97.40% |
+| ROC-AUC | 99.72% |
 
-## 📁 Planned Project Structure
+These are figures reported in the project's documentation, not independently reproduced or verified from the contents of this GitHub repository. Performance depends on dataset provenance, class balance, preprocessing, train/test separation, and evaluation methodology. In particular, URL datasets should be split carefully to reduce domain or near-duplicate leakage.
+
+## Technology stack
+
+The documented implementation uses or evaluates:
+
+| Area | Technologies |
+|---|---|
+| Language | Python |
+| Data processing | Pandas, NumPy |
+| Machine learning | scikit-learn |
+| Boosting | XGBoost, LightGBM |
+| Backend/API | Flask |
+| URL/domain analysis | URL parsing and domain extraction utilities |
+| Visualization | Matplotlib, Seaborn |
+| Model persistence | Pickle / Joblib, as applicable to the implementation |
+
+The final dependency list and exact versions will be recorded in `requirements.txt` when the source code is added.
+
+## Planned repository layout
+
+The actual layout may differ as the source is uploaded. A maintainable target structure is:
 
 ```text
 Phishing-URL-Detection/
-│
-├── app.py
-├── feature_extraction.py
-├── requirements.txt
 ├── README.md
 ├── LICENSE
-│
-├── dataset/
-│   └── phishing_urls.csv
-│
-├── models/
-│   └── phishing_model.pkl
-│
-├── notebooks/
-│   └── model_training.ipynb
-│
-├── src/
-│   ├── preprocessing.py
-│   ├── train.py
-│   └── evaluate.py
-│
-├── templates/
-│   ├── index.html
-│   ├── result.html
-│   ├── history.html
-│   └── about.html
-│
-├── static/
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-└── tests/
-    ├── test_features.py
-    └── test_api.py
+├── .gitignore
+├── requirements.txt
+├── app/                 # Flask routes and application entry point
+├── src/                 # Feature extraction and preprocessing
+├── training/            # Training and evaluation scripts
+├── tests/               # Unit and API tests
+├── templates/           # Web interface templates
+├── static/              # CSS, JavaScript and public assets
+├── docs/                # Project and API documentation
+├── data/                # Local datasets (not committed by default)
+└── models/              # Local trained artifacts (not committed by default)
 ```
 
-*This is a proposed structure; files and directories will be added as the project is implemented.*
+## Installation and execution
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.10 or later (use a version supported by the selected dependencies)
-- Git
-- pip
+The following is the intended local workflow. **It is not yet executable from this repository** because the application entry point and dependency manifest have not been uploaded.
 
 ### 1. Clone the repository
 
@@ -145,75 +132,80 @@ git clone https://github.com/VectorArchitect/Phishing-URL-Detection.git
 cd Phishing-URL-Detection
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create a virtual environment
 
-**Windows**
+**Windows PowerShell**
 
-```bash
-python -m venv venv
-venv\Scripts\activate
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
 **macOS / Linux**
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 ### 3. Install dependencies
 
-Once `requirements.txt` has been added:
+After `requirements.txt` is added:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ### 4. Run the application
 
-Once the Flask application and trained model are implemented:
+The final run command will be documented after the actual Flask entry point and model-loading workflow are present. Do not assume an `app.py` or `api_server.py` filename until it is confirmed in the source tree.
 
-```bash
-python app.py
-```
+## API
 
-Then open http://127.0.0.1:5000 in your browser.
+The project documentation describes single-URL prediction and batch-prediction workflows. Exact endpoint paths, request schemas, response fields, and error codes will be documented from the implemented Flask routes once those files are committed.
 
-> The application is not runnable until its dependencies, dataset pipeline, trained model, and Flask entry point have been implemented.
+## Dataset and model files
 
-## 📊 Evaluation
+Datasets and trained model artifacts are intentionally excluded from version control by default.
 
-Evaluation results, dataset details, and model comparisons will be documented here after experiments are completed. No performance figures are claimed at this stage.
+Before publishing or redistributing any dataset or model, verify:
+- its original source and license;
+- whether redistribution is permitted;
+- whether personal or sensitive data is present;
+- how the artifact was generated and evaluated.
 
-## 🔮 Development Roadmap
+Provide reproducible download or preparation instructions where possible. Do not commit secrets, private datasets, or large generated artifacts.
 
-- [ ] Select and document a suitably licensed phishing URL dataset.
-- [ ] Implement data cleaning and preprocessing.
-- [ ] Build and test URL feature extraction.
-- [ ] Train and compare classification models.
-- [ ] Evaluate generalization on unseen domains.
-- [ ] Integrate the selected model with a Flask API.
-- [ ] Build an interactive dashboard.
-- [ ] Add explainability for individual predictions.
-- [ ] Add scan history and downloadable reports.
-- [ ] Add automated tests and usage documentation.
+## Security and responsible use
 
-## ⚠️ Security Notes & Disclaimer
+- Do not automatically open or browse URLs submitted for classification.
+- Treat URLs, datasets, and request bodies as untrusted input.
+- Do not enter real credentials into suspicious websites during testing.
+- HTTPS does not by itself prove that a website is trustworthy.
+- A legitimate prediction can be a false negative; a phishing prediction can be a false positive.
+- Do not use model confidence as a guarantee of real-world safety.
+- Use the project only for authorized defensive, educational, and research purposes.
 
-This project is intended for educational and research purposes. Its predictions are not a guarantee that a URL is safe or malicious.
+## Development roadmap
 
-- A URL classified as legitimate may still be malicious.
-- Model confidence is not a verified probability of real-world safety.
-- The initial design analyzes URL strings and should not automatically visit submitted URLs.
-- Treat submitted URLs and datasets as untrusted input.
-- Review dataset licensing and attribution requirements before redistribution.
+- [ ] Publish the application source code and dependency manifest.
+- [ ] Document dataset provenance, license, and preparation.
+- [ ] Add reproducible training and evaluation scripts.
+- [ ] Add automated feature-extraction and API tests.
+- [ ] Document exact API request/response schemas.
+- [ ] Add setup instructions verified in a clean environment.
+- [ ] Add screenshots of the actual web interface.
+- [ ] Document model limitations and evaluation methodology.
 
-## 👨‍💻 Author
+## License
 
-**Savinav Sharma**
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
-- GitHub: [@VectorArchitect](https://github.com/VectorArchitect)
+## Author
+
+**Savinav Sharma**  
+GitHub: [@VectorArchitect](https://github.com/VectorArchitect)
 
 ---
 
-If you find this project interesting, consider giving the repository a star!
+If you find this project useful, consider starring the repository.
