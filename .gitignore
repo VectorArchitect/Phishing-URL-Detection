@@ -218,3 +218,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Project-specific: keep datasets and generated model artifacts out of Git.
+# Commit small, license-compatible sample data only when explicitly intended.
+data/
+dataset/
+datasets/
+models/
+artifacts/
+
+# Local experiment outputs
+outputs/
+predictions/
+reports/generated/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+secrets/
