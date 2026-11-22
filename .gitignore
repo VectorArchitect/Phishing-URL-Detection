@@ -239,3 +239,16 @@ reports/generated/
 !.env.example
 !.env.sample
 secrets/
+
+
+# Project-specific generated/private content
+04_Data/
+!04_Data/README.md
+05_Models/*
+!05_Models/README_Models.md
+06_Results/
+logs/
+backups/
+*.zip
+*.DS_Store
+*.textClipping
