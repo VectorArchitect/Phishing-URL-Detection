@@ -1,0 +1,42 @@
+# Phishing URL Detection System configuration
+app:
+  name: "Phishing URL Detection System"
+  environment: "development"
+  host: "127.0.0.1"
+  port: 5000
+
+model:
+  path: "../../05_Models/best_model.pkl"
+  pipeline_path: "../../05_Models/pipeline.pkl"
+  feature_names: "../../05_Models/feature_names.json"
+  metadata: "../../05_Models/model_metadata.json"
+  threshold: 0.50
+  confidence_min: 0.60
+
+logging:
+  level: "INFO"
+  log_file: "../../logs/api.log"
+  error_log_file: "../../logs/error.log"
+
+security:
+  enable_ssl_checks: true
+  enable_domain_checks: true
+  max_request_size: "1MB"
+  rate_limit: "20 per minute"
+
+api:
+  enable_batch: true
+  max_batch_size: 50
+
+features:
+  enable_lexical: true
+  enable_domain: true
+  enable_ssl: true
+
+external_services:
+  whois_timeout: 5
+  ssl_timeout: 5
+
+performance:
+  enable_caching: true
+  cache_ttl: 300
