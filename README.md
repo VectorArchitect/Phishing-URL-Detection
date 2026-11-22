@@ -1,211 +1,94 @@
 # Phishing URL Detection System
 
-A Python-based machine learning project for identifying potentially malicious URLs through hybrid feature extraction, ensemble classification, and a Flask web interface/API.
+A Python project exploring phishing URL detection through URL feature extraction, machine-learning classification, and a Flask API with a React interface prototype.
 
-> **Repository status:** This repository currently contains project documentation and configuration files. The application source code, dataset, trained models, and frontend assets have not yet been pushed. The sections below describe the system documented for this project; setup commands will become executable once the corresponding files are added.
+> **Status: work in progress.** The supplied archive contains source prototypes and documentation, but not a complete runnable system. The training/data-pipeline module, training script, dataset, trained model artifacts, and automated tests are absent. The Flask API imports a missing `data_pipeline` module and expects model files that are not present.
 
-## Overview
+## Repository contents
 
-Phishing URLs imitate legitimate websites or use deceptive structures to persuade people to disclose credentials and other sensitive information. This project explores the use of machine learning to classify URLs as **potentially phishing** or **potentially legitimate**.
+| Area | Included | Current status |
+|---|---|---|
+| Feature extraction | `feature_extraction.py` | Present; includes a mock domain-age value |
+| Flask API | `api_server.py` in the supplied archive | Depends on missing pipeline and model artifacts |
+| Frontend | React/TypeScript UI prototype | Prediction currently uses local heuristic logic; API fetch is commented out |
+| Configuration | YAML config | Present |
+| Dependencies | Python requirements | Present |
+| Documentation | SRS, user manual, deployment guide, model notes, checklist | Supplied |
+| Dataset / training pipeline | Dataset, `data_pipeline.py`, training script | Not supplied |
+| Model artifacts | Model, scaler/pipeline, metadata | Not supplied |
+| Tests / CI | Automated tests and workflows | Not supplied |
 
-The documented system combines URL lexical analysis, domain-related attributes, and SSL/security indicators. Extracted features are supplied to trained classifiers, with predictions exposed through a Flask application.
+## Important implementation notes
 
-This is a defensive educational/research project. A model prediction is an indicator, not a guarantee that a website is safe or malicious.
+- The domain-age feature is explicitly hash-based mock data, not WHOIS registration intelligence.
+- SSL checks perform network connections and can fail due to DNS, connectivity, certificate, or timeout conditions.
+- Feature names/count/order must be reconciled and frozen between training and inference before predictions can be trusted.
+- The model documentation reports 97.40% accuracy, 97.20% precision, 97.60% recall, 0.974 F1, and 0.9972 ROC-AUC. The dataset, training code, model, and evaluation outputs were not supplied, so these figures are documented claims and are not independently reproducible from this repository.
+- The frontend currently demonstrates heuristic scoring, not predictions from the trained ML model.
 
-## Documented capabilities
+## Setup
 
-- Hybrid URL feature extraction.
-- Comparison of ensemble machine learning classifiers.
-- Flask-based web interface and REST API.
-- Single-URL and batch prediction workflows.
-- Prediction scores and model evaluation visualizations.
-- Feature-importance information for model interpretation.
-
-These capabilities are described in the project documentation; they should not be considered runnable from this repository until the implementation is uploaded.
-
-## System design
-
-```text
-             URL submitted by user
-                      |
-                      v
-              Flask interface/API
-                      |
-                      v
-             URL feature extraction
-                      |
-                      v
-             Hybrid feature vector
-                      |
-                      v
-              Trained classifier
-                      |
-                      v
-          Phishing / Legitimate result
-                      |
-                      v
-              Result and score
-```
-
-## Feature engineering
-
-The project documentation describes **29 hybrid features** across three groups:
-
-| Feature group | Count | Examples |
-|---|---:|---|
-| Lexical | 20 | URL length, special characters, suspicious keywords, IP-address indicators |
-| Domain | 6 | Subdomain count, domain-related attributes, entropy |
-| SSL/security | 3 | HTTPS and certificate-related indicators |
-| **Total** | **29** | |
-
-Some domain attributes may require external lookups. A feature based on a mock or unavailable lookup must be identified as such and must not be presented as verified threat intelligence.
-
-## Machine learning
-
-The documented model comparison includes:
-
-- Random Forest
-- Gradient Boosting
-- XGBoost
-- LightGBM
-
-The project documentation identifies **XGBoost** as the selected model.
-
-### Reported evaluation results
-
-| Metric | Documented result |
-|---|---:|
-| Accuracy | 97.40% |
-| Precision | 97.20% |
-| Recall | 97.60% |
-| F1-score | 97.40% |
-| ROC-AUC | 99.72% |
-
-These are figures reported in the project's documentation, not independently reproduced or verified from the contents of this GitHub repository. Performance depends on dataset provenance, class balance, preprocessing, train/test separation, and evaluation methodology. In particular, URL datasets should be split carefully to reduce domain or near-duplicate leakage.
-
-## Technology stack
-
-The documented implementation uses or evaluates:
-
-| Area | Technologies |
-|---|---|
-| Language | Python |
-| Data processing | Pandas, NumPy |
-| Machine learning | scikit-learn |
-| Boosting | XGBoost, LightGBM |
-| Backend/API | Flask |
-| URL/domain analysis | URL parsing and domain extraction utilities |
-| Visualization | Matplotlib, Seaborn |
-| Model persistence | Pickle / Joblib, as applicable to the implementation |
-
-The final dependency list and exact versions will be recorded in `requirements.txt` when the source code is added.
-
-## Planned repository layout
-
-The actual layout may differ as the source is uploaded. A maintainable target structure is:
-
-```text
-Phishing-URL-Detection/
-├── README.md
-├── LICENSE
-├── .gitignore
-├── requirements.txt
-├── app/                 # Flask routes and application entry point
-├── src/                 # Feature extraction and preprocessing
-├── training/            # Training and evaluation scripts
-├── tests/               # Unit and API tests
-├── templates/           # Web interface templates
-├── static/              # CSS, JavaScript and public assets
-├── docs/                # Project and API documentation
-├── data/                # Local datasets (not committed by default)
-└── models/              # Local trained artifacts (not committed by default)
-```
-
-## Installation and execution
-
-The following is the intended local workflow. **It is not yet executable from this repository** because the application entry point and dependency manifest have not been uploaded.
-
-### 1. Clone the repository
+Python 3.8+ is the documented baseline.
 
 ```bash
-git clone https://github.com/VectorArchitect/Phishing-URL-Detection.git
-cd Phishing-URL-Detection
+python -m venv .venv
 ```
 
-### 2. Create a virtual environment
-
-**Windows PowerShell**
+Activate the environment:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
 ```
 
-**macOS / Linux**
-
 ```bash
-python3 -m venv .venv
+# macOS / Linux
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
-
-After `requirements.txt` is added:
+Install dependencies:
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r 07_Deployment/requirements.txt
 ```
 
-### 4. Run the application
+This only prepares the Python environment. The current source set is not yet sufficient to launch a working prediction service because the pipeline module and trained model artifacts are missing.
 
-The final run command will be documented after the actual Flask entry point and model-loading workflow are present. Do not assume an `app.py` or `api_server.py` filename until it is confirmed in the source tree.
+## API routes documented in the Flask source
 
-## API
+| Method | Route | Purpose |
+|---|---|---|
+| GET | `/` | Browser interface |
+| GET | `/health` | Health/model status |
+| POST | `/predict` | Single URL prediction |
+| POST | `/batch_predict` | Batch URL prediction |
 
-The project documentation describes single-URL prediction and batch-prediction workflows. Exact endpoint paths, request schemas, response fields, and error codes will be documented from the implemented Flask routes once those files are committed.
+These are source-level routes; they have not been verified end-to-end.
 
-## Dataset and model files
+## Security and data handling
 
-Datasets and trained model artifacts are intentionally excluded from version control by default.
+- Treat model output as a risk signal, not proof that a site is safe or malicious.
+- Do not visit suspicious URLs for testing; use synthetic strings or isolated, authorized test environments.
+- Do not commit private datasets, credentials, `.env` files, virtual environments, logs, or generated model binaries.
+- Only load pickle/joblib artifacts from trusted sources.
+- Verify dataset provenance, licensing, class balance, leakage risks, and train/test separation before publishing performance claims.
 
-Before publishing or redistributing any dataset or model, verify:
-- its original source and license;
-- whether redistribution is permitted;
-- whether personal or sensitive data is present;
-- how the artifact was generated and evaluated.
+## Roadmap
 
-Provide reproducible download or preparation instructions where possible. Do not commit secrets, private datasets, or large generated artifacts.
+1. Implement and document dataset ingestion and cleaning.
+2. Add the missing data pipeline and model-training/evaluation scripts.
+3. Reconcile feature count, names, ordering, and preprocessing across training and inference.
+4. Replace or disable mock domain-age values.
+5. Add a small license-compatible fixture and automated unit/API tests.
+6. Connect the frontend to the Flask API and show unavailable-service states.
+7. Add reproducible evaluation outputs and CI checks.
+8. Add deployment assets after a clean installation and end-to-end run succeed.
 
-## Security and responsible use
+## Documentation
 
-- Do not automatically open or browse URLs submitted for classification.
-- Treat URLs, datasets, and request bodies as untrusted input.
-- Do not enter real credentials into suspicious websites during testing.
-- HTTPS does not by itself prove that a website is trustworthy.
-- A legitimate prediction can be a false negative; a phishing prediction can be a false positive.
-- Do not use model confidence as a guarantee of real-world safety.
-- Use the project only for authorized defensive, educational, and research purposes.
-
-## Development roadmap
-
-- [ ] Publish the application source code and dependency manifest.
-- [ ] Document dataset provenance, license, and preparation.
-- [ ] Add reproducible training and evaluation scripts.
-- [ ] Add automated feature-extraction and API tests.
-- [ ] Document exact API request/response schemas.
-- [ ] Add setup instructions verified in a clean environment.
-- [ ] Add screenshots of the actual web interface.
-- [ ] Document model limitations and evaluation methodology.
+Project documentation and reference material belong under `01_Documentation/`; deployment notes and dependencies are under `07_Deployment/`. Model notes are under `05_Models/`.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Author
-
-**Savinav Sharma**  
-GitHub: [@VectorArchitect](https://github.com/VectorArchitect)
-
----
-
-If you find this project useful, consider starring the repository.
+MIT License. See [LICENSE](LICENSE).
