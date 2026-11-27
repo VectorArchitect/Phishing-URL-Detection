@@ -3,7 +3,7 @@ Feature Extraction Module for Phishing URL Detection.
 Extracts lexical, domain-derived, and SSL/security URL attributes.
 """
 
-import re
+import ipaddress
 import socket
 import ssl
 import urllib.parse
@@ -50,8 +50,13 @@ class URLFeatureExtractor:
         num_digits = sum(c.isdigit() for c in url)
         features["digit_ratio"] = num_digits / len(url) if url else 0
 
-        ip_pattern = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
-        features["has_ip_address"] = 1.0 if re.search(ip_pattern, url) else 0.0
+        parsed = urllib.parse.urlparse(url)
+        try:
+            ipaddress.ip_address(parsed.hostname or "")
+        except ValueError:
+            features["has_ip_address"] = 0.0
+        else:
+            features["has_ip_address"] = 1.0
 
         url_lower = url.lower()
         features["num_suspicious_keywords"] = sum(
@@ -63,7 +68,6 @@ class URLFeatureExtractor:
         )
         features["has_https"] = 1.0 if url_lower.startswith("https://") else 0.0
 
-        parsed = urllib.parse.urlparse(url)
         try:
             features["has_port"] = 1.0 if parsed.port is not None else 0.0
         except ValueError:
