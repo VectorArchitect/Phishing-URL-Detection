@@ -16,7 +16,7 @@ A Python project exploring phishing URL detection through URL feature extraction
 | Documentation | SRS, user manual, deployment guide, model notes, checklist | Supplied |
 | Dataset / training pipeline | Dataset, `data_pipeline.py`, training script | Not supplied |
 | Model artifacts | Model, scaler/pipeline, metadata | Not supplied |
-| Tests / CI | Automated tests and workflows | Not supplied |
+| Tests / CI | `tests/test_feature_extraction.py` and GitHub Actions | Focused feature-extraction regression tests; full API/model integration remains unavailable |
 
 ## Important implementation notes
 
@@ -55,6 +55,16 @@ python -m pip install -r 07_Deployment/requirements.txt
 
 This only prepares the Python environment. The current source set is not yet sufficient to launch a working prediction service because the pipeline module and trained model artifacts are missing.
 
+## Tests
+
+Run the focused, hardware- and network-independent feature-extraction regression suite from the repository root:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests mock domain parsing and outbound SSL connections. They validate the feature extractor only; they do not make the missing training pipeline, model artifacts, Flask API, or frontend runnable.
+
 ## API routes documented in the Flask source
 
 | Method | Route | Purpose |
@@ -80,7 +90,7 @@ These are source-level routes; they have not been verified end-to-end.
 2. Add the missing data pipeline and model-training/evaluation scripts.
 3. Reconcile feature count, names, ordering, and preprocessing across training and inference.
 4. Replace or disable mock domain-age values.
-5. Add a small license-compatible fixture and automated unit/API tests.
+5. Add a small license-compatible fixture and automated API tests; focused feature-extraction regression tests are now under `tests/`.
 6. Connect the frontend to the Flask API and show unavailable-service states.
 7. Add reproducible evaluation outputs and CI checks.
 8. Add deployment assets after a clean installation and end-to-end run succeed.
